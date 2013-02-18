@@ -42,6 +42,7 @@ struct sandboxrpc_reply_hdr {
 void sandbox_create(struct sandbox_cb *scb, void (*sandbox_mainfn)(void));
 
 ssize_t host_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags);
+ssize_t host_recv_nonblock(struct sandbox_cb *scb, void *buf, size_t len, int flags);
 ssize_t host_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int
 	flags, int *fdp, int *fdcountp);
 int host_rpc(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req, int

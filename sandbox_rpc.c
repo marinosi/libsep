@@ -1,5 +1,6 @@
 #include <sys/socket.h>
 
+#include <fcntl.h>
 #include <strings.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -138,6 +139,7 @@ _sandbox_rpc_send_rights(int fd, const void *msg, size_t len, int flags, int
 	return (retlen);
 }
 
+#include <stdio.h>
 ssize_t
 _sandbox_rpc_recv(int fd, void *buf, size_t len, int flags)
 {
@@ -151,6 +153,43 @@ _sandbox_rpc_recv(int fd, void *buf, size_t len, int flags)
 	do {
 		retlen = recv(fd, buf, len, flags);
 	} while (retlen < 0 && errno == EINTR);
+
+	/* This is for non blocking file descriptors */
+	if (errno == EAGAIN) {
+		retlen = 0;
+	}
+
+	return (retlen);
+}
+
+ssize_t
+_sandbox_rpc_recv_nonblock(int fd, void *buf, size_t len, int flags)
+{
+	ssize_t retlen = 0;
+	fd_set	rset;
+	struct timeval tv;
+	ssize_t ret;
+
+	if(fd == -1 || fd == 0) {
+		errno = ESRCH;
+		return (-1);
+	}
+
+	FD_ZERO(&rset);
+	FD_SET(fd, &rset);
+	tv.tv_sec = 0;
+	tv.tv_usec = 100;
+
+	ret = select(fd+1, &rset, NULL, NULL, &tv);
+	if (ret > 0) {
+		do {
+			retlen = recv(fd, buf, len, flags | MSG_WAITALL);
+
+		} while (retlen < 0 && errno == EINTR);
+
+		if (errno == EAGAIN)
+			retlen = 0;
+	}
 
 	return (retlen);
 }

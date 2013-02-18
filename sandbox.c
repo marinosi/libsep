@@ -68,6 +68,13 @@ host_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags)
 }
 
 ssize_t
+host_recv_nonblock(struct sandbox_cb *scb, void *buf, size_t len, int flags)
+{
+
+	return (_sandbox_rpc_recv_nonblock(scb->fd_host_end, buf, len, flags));
+}
+
+ssize_t
 host_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int flags,
     int *fdp, int *fdcountp)
 {

@@ -10,6 +10,7 @@ ssize_t _sandbox_rpc_send(int fd, const void *msg, size_t len, int flags);
 ssize_t _sandbox_rpc_send_rights(int fd, const void *msg, size_t len, int
 	flags, int *fdp, int fdcount);
 ssize_t _sandbox_rpc_recv(int fd, void *buf, size_t len, int flags);
+ssize_t _sandbox_rpc_recv_nonblock(int fd, void *buf, size_t len, int flags);
 ssize_t _sandbox_rpc_recv_rights(int fd, void *buf, size_t len, int flags, int
 	*fdp, int *fdcountp);
 
