@@ -49,10 +49,14 @@ int host_rpc(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req, int
 int host_rpc_rights(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
 	int reqcount, int *req_fdp, int req_fdcount, struct iovec *rep, int
 	repcount, size_t *replenp, int *rep_fdp, int *rep_fdcountp);
+int host_recvrpc(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
+	u_char **bufferp, size_t *lenp);
 ssize_t host_send(struct sandbox_cb *scb, const void *msg, size_t len, int
 	flags);
 ssize_t host_send_rights(struct sandbox_cb *scb, const void *msg, size_t len,
 	int flags, int *fdp, int fdcount);
+int host_sendrpc(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
+    struct iovec *req, int reqcount, int *fdp, int fdcount);
 ssize_t sandbox_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags);
 ssize_t sandbox_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int
 	flags, int *fdp, int *fdcountp);
