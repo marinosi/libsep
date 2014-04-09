@@ -40,9 +40,12 @@ _sandbox_rpc_receive_rights(struct msghdr *msg, int *fdp, int *fdcountp)
 		if (cmsg->cmsg_level != SOL_SOCKET ||
 		    cmsg->cmsg_type != SCM_RIGHTS)
 			continue;
-		fdcount += (cmsg->cmsg_len - CMSG_LEN(0)) / sizeof(int);
+		/* XXX IM: recheck this! */
+		/*fdcount += (cmsg->cmsg_len - CMSG_LEN(0)) / sizeof(int);*/
+		fdcount++;
 		scmrightscount++;
 	}
+
 	if (scmrightscount > 1 || fdcount > *fdcountp) {
 		for (cmsg = CMSG_FIRSTHDR(msg); cmsg != NULL;
 		    cmsg = CMSG_NXTHDR(msg, cmsg)) {
