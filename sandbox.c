@@ -45,12 +45,14 @@ sandbox_create(struct sandbox_cb *scb, void  (*sandbox_mainfn)(void))
 }
 
 /* Simple I/O wrappers. */
+// send message to sandbox
 ssize_t
 host_send(struct sandbox_cb *scb, const void *msg, size_t len, int flags)
 {
 	return (_sandbox_rpc_send(scb->fd_host_end, msg, len, flags));
 }
 
+// send message+rights to sandbox
 ssize_t
 host_send_rights(struct sandbox_cb *scb, const void *msg, size_t len,
     int flags, int *fdp, int fdcount)
@@ -60,6 +62,7 @@ host_send_rights(struct sandbox_cb *scb, const void *msg, size_t len,
 		fdcount));
 }
 
+// receive message from sandbox
 ssize_t
 host_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags)
 {
@@ -67,6 +70,7 @@ host_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags)
 	return (_sandbox_rpc_recv(scb->fd_host_end, buf, len, flags));
 }
 
+// receive message+rights from sandbox
 ssize_t
 host_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int flags,
     int *fdp, int *fdcountp)
@@ -317,6 +321,7 @@ host_rpc_internal(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
 	return (0);
 }
 
+// send rpc message to sandbox and receive reply
 int
 host_rpc(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
     int reqcount, struct iovec *rep, int repcount, size_t *replenp)
@@ -326,6 +331,7 @@ host_rpc(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
 	    rep, repcount, replenp, NULL, NULL));
 }
 
+// send rpc message+rights to sandbox and receive reply
 int
 host_rpc_rights(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
     int reqcount, int *req_fdp, int req_fdcount, struct iovec *rep,
@@ -336,6 +342,7 @@ host_rpc_rights(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
 	    req_fdcount, rep, repcount, replenp, rep_fdp, rep_fdcountp));
 }
 
+// receive rpc message from sandbox
 int
 host_recvrpc(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
 	u_char **bufferp, size_t *lenp)
@@ -344,6 +351,7 @@ host_recvrpc(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
 	return (host_recvrpc_internal(scb, opnop, seqnop, bufferp, lenp));
 }
 
+// send rpc message to sandbox
 int
 host_sendrpc(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
     struct iovec *req, int reqcount, int *fdp, int fdcount)
@@ -353,6 +361,7 @@ host_sendrpc(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
 		fdcount));
 }
 
+// receive message from host
 ssize_t
 sandbox_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags)
 {
@@ -360,6 +369,7 @@ sandbox_recv(struct sandbox_cb *scb, void *buf, size_t len, int flags)
 	return (_sandbox_rpc_recv(scb->fd_sandbox_end, buf, len, flags));
 }
 
+// receive message+rights from host
 ssize_t
 sandbox_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int flags,
     int *fdp, int *fdcountp)
@@ -369,6 +379,7 @@ sandbox_recv_rights(struct sandbox_cb *scb, void *buf, size_t len, int flags,
 		fdcountp));
 }
 
+// send message to host
 ssize_t
 sandbox_send(struct sandbox_cb *scb, const void *msg, size_t len, int flags)
 {
@@ -376,6 +387,7 @@ sandbox_send(struct sandbox_cb *scb, const void *msg, size_t len, int flags)
 	return (_sandbox_rpc_send(scb->fd_sandbox_end, msg, len, flags));
 }
 
+// send message+rights to host
 ssize_t
 sandbox_send_rights(struct sandbox_cb *scb, const void *msg, size_t len,
     int flags, int *fdp, int fdcount)
@@ -477,6 +489,7 @@ sandbox_recvrpc_internal(struct sandbox_cb *scb, u_int32_t *opnop,
 	return (0);
 }
 
+// receive rpc message from host
 int
 sandbox_recvrpc(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
     u_char **bufferp, size_t *lenp)
@@ -486,6 +499,7 @@ sandbox_recvrpc(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
 	    NULL, NULL));
 }
 
+// receive rpc message+rights from host
 int
 sandbox_recvrpc_rights(struct sandbox_cb *scb, u_int32_t *opnop, u_int32_t *seqnop,
     u_char **bufferp, size_t *lenp, int *fdp, int *fdcountp)
@@ -542,6 +556,7 @@ sandbox_sendrpc_internal(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno
 	return (0);
 }
 
+// send rpc message to host
 int
 sandbox_sendrpc(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
     struct iovec *rep, int repcount)
@@ -551,6 +566,7 @@ sandbox_sendrpc(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
 	    0));
 }
 
+// send rpc message+rights to host
 int
 sandbox_sendrpc_rights(struct sandbox_cb *scb, u_int32_t opno, u_int32_t seqno,
     struct iovec *rep, int repcount, int *fdp, int fdcount)
