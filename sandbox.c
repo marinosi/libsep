@@ -261,6 +261,8 @@ host_rpc_internal(struct sandbox_cb *scb, u_int32_t opno, struct iovec *req,
 	/*
 	 * Receive our header and validate.
 	 */
+  if (rep_fdp == NULL && repcount == 0)
+    return 0;
 	if (rep_fdp != NULL)
 		len = _sandbox_rpc_recv_rights(scb->fd_host_end, &rep_hdr,
 			sizeof(rep_hdr), MSG_WAITALL, rep_fdp, rep_fdcountp);
